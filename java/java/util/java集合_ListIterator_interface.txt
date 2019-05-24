@@ -1,0 +1,239 @@
+/*
+ * Copyright (c) 1997, 2011, Oracle and/or its affiliates. All rights reserved.
+ * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
+package java.util;
+
+/**
+ * An iterator for lists that allows the programmer
+ * to traverse the list in either direction, modify
+ * the list during iteration, and obtain the iterator's
+ * current position in the list. A {@code ListIterator}
+ * has no current element; its <I>cursor position</I> always
+ * lies between the element that would be returned by a call
+ * to {@code previous()} and the element that would be
+ * returned by a call to {@code next()}.
+ * An iterator for a list of length {@code n} has {@code n+1} possible
+ * cursor positions, as illustrated by the carets ({@code ^}) below:
+ * <PRE>
+ *                      Element(0)   Element(1)   Element(2)   ... Element(n-1)
+ * cursor positions:  ^            ^            ^            ^                  ^
+ * </PRE>
+ * Note that the {@link #remove} and {@link #set(Object)} methods are
+ * <i>not</i> defined in terms of the cursor position;  they are defined to
+ * operate on the last element returned by a call to {@link #next} or
+ * {@link #previous()}.
+ * 用于列表的迭代器，它允许程序员以任意方向遍历列表，在迭代期间修改列表，并获取迭代器在列表中的当前位置。
+ * {@code ListIterator}没有当前元素;它的游标位置总是位于调用{@code previous()}返回的元素和调用{@code next()}返回的元素之间。
+ * 长度为{@code n}的列表的迭代器具有{@code n+1}可能的光标位置，如下面的插入符号({@code ^})所示:
+ *                      Element(0)   Element(1)   Element(2)   ... Element(n-1)
+ * cursor positions:  ^            ^            ^            ^                  ^
+ * 注意，{@link #remove}和{@link #set(Object)}方法不是根据游标位置定义的;它们被定义为操作调用{@link #next}或{@link #previous()}返回的最后一个元素。
+ *
+ * <p>This interface is a member of the
+ * <a href="{@docRoot}/../technotes/guides/collections/index.html">
+ * Java Collections Framework</a>.
+ * 这个接口是Java集合框架的成员
+ *
+ * @author  Josh Bloch
+ * @see Collection
+ * @see List
+ * @see Iterator
+ * @see Enumeration
+ * @see List#listIterator()
+ * @since   1.2
+ */
+public interface ListIterator<E> extends Iterator<E> {
+    // Query Operations
+
+    /**
+     * Returns {@code true} if this list iterator has more elements when
+     * traversing the list in the forward direction. (In other words,
+     * returns {@code true} if {@link #next} would return an element rather
+     * than throwing an exception.)
+     * 如果这个列表迭代器在正向遍历列表时有更多的元素，则返回{@code true}。(换句话说，如果{@link #next}返回一个元素而不是抛出异常，则返回{@code true}。)
+     *
+     * @return {@code true} if the list iterator has more elements when
+     *         traversing the list in the forward direction
+     * @return 如果列表迭代器在正向遍历列表时有更多的元素，则为{@code true}
+     */
+    boolean hasNext();
+
+    /**
+     * Returns the next element in the list and advances the cursor position.
+     * This method may be called repeatedly to iterate through the list,
+     * or intermixed with calls to {@link #previous} to go back and forth.
+     * (Note that alternating calls to {@code next} and {@code previous}
+     * will return the same element repeatedly.)
+     * 返回列表中的下一个元素并向前移动光标位置。可以反复调用此方法来遍历列表，也可以将此方法与对{@link #previous}的调用混合在一起来回调用。
+     * (注意，交替调用{@code next}和{@code previous}将重复返回相同的元素。)
+     *
+     * @return the next element in the list
+     * @return 列表中的前一个元素
+     * @throws NoSuchElementException if the iteration has no next element
+     * @throws 如果迭代没有下一个元素，则NoSuchElementException
+     */
+    E next();
+
+    /**
+     * Returns {@code true} if this list iterator has more elements when
+     * traversing the list in the reverse direction.  (In other words,
+     * returns {@code true} if {@link #previous} would return an element
+     * rather than throwing an exception.)
+     * 如果这个列表迭代器在反向遍历列表时有更多的元素，则返回{@code true}。(换句话说，如果{@link #previous}返回元素而不是抛出异常，则返回{@code true}。)
+     *
+     * @return {@code true} if the list iterator has more elements when
+     *         traversing the list in the reverse direction
+     * @return 如果列表迭代器在反向遍历列表时有更多的元素，则为{@code true}
+     */
+    boolean hasPrevious();
+
+    /**
+     * Returns the previous element in the list and moves the cursor
+     * position backwards.  This method may be called repeatedly to
+     * iterate through the list backwards, or intermixed with calls to
+     * {@link #next} to go back and forth.  (Note that alternating calls
+     * to {@code next} and {@code previous} will return the same
+     * element repeatedly.)
+     * 返回列表中的前一个元素并向后移动光标位置。可以反复调用此方法来向后遍历列表，也可以将此方法与对{@link #next}的调用混合在一起来回调用。
+     * (注意，交替调用{@code next}和{@code previous}将重复返回相同的元素。)
+     *
+     * @return the previous element in the list
+     * @return 列表中的前一个元素
+     * @throws NoSuchElementException if the iteration has no previous
+     *         element
+     * @throws 如果迭代没有前一个元素，则NoSuchElementException
+     */
+    E previous();
+
+    /**
+     * Returns the index of the element that would be returned by a
+     * subsequent call to {@link #next}. (Returns list size if the list
+     * iterator is at the end of the list.)
+     * 返回将由后续调用{@link #next}返回的元素的索引。(如果列表迭代器位于列表末尾，则返回列表大小。)
+     *
+     * @return the index of the element that would be returned by a
+     *         subsequent call to {@code next}, or list size if the list
+     *         iterator is at the end of the list
+     * @return 后续调用{@code next}将返回的元素的索引，如果列表迭代器位于列表末尾，则返回列表大小
+     */
+    int nextIndex();
+
+    /**
+     * Returns the index of the element that would be returned by a
+     * subsequent call to {@link #previous}. (Returns -1 if the list
+     * iterator is at the beginning of the list.)
+     * 返回将由后续调用{@link #previous}返回的元素的索引。(如果列表迭代器位于列表的开头，则返回-1。)
+     *
+     * @return the index of the element that would be returned by a
+     *         subsequent call to {@code previous}, or -1 if the list
+     *         iterator is at the beginning of the list
+     * @return 后续调用{@code previous}将返回的元素的索引，如果列表迭代器位于列表的开头，则返回-1
+     */
+    int previousIndex();
+
+
+    // Modification Operations
+
+    /**
+     * Removes from the list the last element that was returned by {@link
+     * #next} or {@link #previous} (optional operation).  This call can
+     * only be made once per call to {@code next} or {@code previous}.
+     * It can be made only if {@link #add} has not been
+     * called after the last call to {@code next} or {@code previous}.
+     * 从列表中删除{@link #next}或{@link #previous}返回的最后一个元素(可选操作)。
+     * 此调用只能在每次调用{@code next}或{@code previous}时执行一次。
+     * 只有在最后一次调用{@code next}或{@code previous}之后没有调用{@link #add}时，才可以执行此操作。
+     *
+     * @throws UnsupportedOperationException if the {@code remove}
+     *         operation is not supported by this list iterator
+     * @throws如果此列表迭代器不支持{@code remove}操作，则为UnsupportedOperationException
+     * @throws IllegalStateException if neither {@code next} nor
+     *         {@code previous} have been called, or {@code remove} or
+     *         {@code add} have been called after the last call to
+     *         {@code next} or {@code previous}
+     * @throws 如果{@code next}和{@code previous}都没有被调用，
+     * 或者{@code remove}或{@code add}在最后一次调用{@code next}或{@code previous}之后被调用，则为IllegalStateException
+     */
+    void remove();
+
+    /**
+     * Replaces the last element returned by {@link #next} or
+     * {@link #previous} with the specified element (optional operation).
+     * This call can be made only if neither {@link #remove} nor {@link
+     * #add} have been called after the last call to {@code next} or
+     * {@code previous}.
+     * 用指定的元素(可选操作)替换{@link #next}或{@link #previous}返回的最后一个元素。
+     * 只有在最后一次调用{@code next}或{@code previous}之后，没有调用{@link #remove}或{@link #add}，才可以执行此调用。
+     *
+     * @param e the element with which to replace the last element returned by
+     *          {@code next} or {@code previous}
+     * @param e 用来替换{@code next}或{@code previous}返回的最后一个元素的元素
+     * @throws UnsupportedOperationException if the {@code set} operation
+     *         is not supported by this list iterator
+     * @throws 如果此列表迭代器不支持{@code set}操作，则为UnsupportedOperationException
+     * @throws ClassCastException if the class of the specified element
+     *         prevents it from being added to this list
+     * @throws 如果指定元素的类阻止将其添加到此列表，则ClassCastException
+     * @throws IllegalArgumentException if some aspect of the specified
+     *         element prevents it from being added to this list
+     * @throws 如果指定元素的某些方面阻止将其添加到此列表中，则为IllegalArgumentException
+     * @throws IllegalStateException if neither {@code next} nor
+     *         {@code previous} have been called, or {@code remove} or
+     *         {@code add} have been called after the last call to
+     *         {@code next} or {@code previous}
+     * @throws 如果{@code next}和{@code previous}都没有被调用，
+     * 或者{@code remove}或{@code add}在最后一次调用{@code next}或{@code previous}之后被调用，则为IllegalStateException
+     */
+    void set(E e);
+
+    /**
+     * Inserts the specified element into the list (optional operation).
+     * The element is inserted immediately before the element that
+     * would be returned by {@link #next}, if any, and after the element
+     * that would be returned by {@link #previous}, if any.  (If the
+     * list contains no elements, the new element becomes the sole element
+     * on the list.)  The new element is inserted before the implicit
+     * cursor: a subsequent call to {@code next} would be unaffected, and a
+     * subsequent call to {@code previous} would return the new element.
+     * (This call increases by one the value that would be returned by a
+     * call to {@code nextIndex} or {@code previousIndex}.)
+     * 将指定的元素插入列表(可选操作)。元素被插入到{@link #next}返回的元素之前(如果有的话)，以及{@link #previous}返回的元素之后(如果有的话)。
+     * (如果列表不包含元素，则新元素将成为列表中的唯一元素。)新元素插入到隐式游标之前:对{@code next}的后续调用不受影响，对{@code previous}的后续调用将返回新元素。
+     * (此调用将把调用{@code nextIndex}或{@code previousIndex}返回的值增加1。)
+     *
+     * @param e the element to insert
+     * @param e 要插入的元素
+     * @throws UnsupportedOperationException if the {@code add} method is
+     *         not supported by this list iterator
+     * @throws 如果此列表迭代器不支持{@code add}方法，则为UnsupportedOperationException
+     * @throws ClassCastException if the class of the specified element
+     *         prevents it from being added to this list
+     * @throws 如果指定元素的类阻止将其添加到此列表，则ClassCastException
+     * @throws IllegalArgumentException if some aspect of this element
+     *         prevents it from being added to this list
+     * @throws 如果该元素的某些方面阻止将其添加到此列表中，则为IllegalArgumentException
+     */
+    void add(E e);
+}
